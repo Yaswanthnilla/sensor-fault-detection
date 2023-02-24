@@ -1,3 +1,11 @@
 pymongo[srv]==4.2.0
+from_root
 dnspython
+numpy
+pandas
+sklearn
+scipy
+PyYAML
+dill
+imblearn
 -e .
