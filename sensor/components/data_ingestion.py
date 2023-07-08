@@ -15,7 +15,7 @@ class DataIngestion:
 	def __init__(self,data_ingestion_config:DataIngestionConfig):
 		try:
 			self.data_ingestion_config=data_ingestion_config
-			#self._schema_config=read_yaml_file("C:/Users/N YASWANTH KUMAR/OneDrive/Desktop/sensor-fault-detection/sensor/config/schema.yaml")
+			# self._schema_config=read_yaml_file("C:/Users/N YASWANTH KUMAR/OneDrive/Desktop/sensor-fault-detection/sensor/config/schema.yaml")
 			logging.info(SCHEMA_FILE_PATH)
 			self._schema_config=read_yaml_file(SCHEMA_FILE_PATH)
 
@@ -31,6 +31,9 @@ class DataIngestion:
 
 		try:
 			logging.info("Exporting data from mongodb to feature_store folder")
+
+			# Creating object to the SensorData() class in data_access.py file which is used to export data
+			# as a datframe from mongodb
 			sensor_data=SensorData()
 			dataframe=sensor_data.export_collection_as_dataframe(collection_name=self.data_ingestion_config.collection_name)
 
@@ -57,9 +60,9 @@ class DataIngestion:
 			train_data,test_data=train_test_split(dataframe,test_size=self.data_ingestion_config.train_test_split_ratio)
 			logging.info("Performed train test split on the dataframe")
 
-			logging.info(
-				"Exited split_data_as_train_test method of Data_Ingestion class"
-			)
+
+			# dir_path is the path to the ingested folder in artifact folder
+			# os.path.dirname will give the ingested folder path
 
 			dir_path=os.path.dirname(self.data_ingestion_config.training_file_path)
 			dir_path1=os.path.dirname(self.data_ingestion_config.testing_file_path)
@@ -73,16 +76,15 @@ class DataIngestion:
 			train_data.to_csv(self.data_ingestion_config.training_file_path,header=True,index=False)
 			test_data.to_csv(self.data_ingestion_config.testing_file_path,header=True,index=False)
 
-			logging.info("Expoting train and test data completed")
+			logging.info("Exporting train and test data completed")
+
+			logging.info(
+				"Exited split_data_as_train_test method of Data_Ingestion class"
+			)
 
 		except Exception as e:
 			raise SensorException(e,sys)
 			
-			
-
-
-
-
 
 
 	def initialize_data_ingestion(self)->DataIngestionArtifact:
