@@ -52,11 +52,9 @@ class TrainPipeline:
     def run_pipeline(self):
 
         try:
-
             self.data_ingestion_artifact:DataIngestionArtifact= self.start_data_ingestion()
             self.data_validation_artifact:DataValidationArtifact=self.start_data_validation(data_ingestion_artifact=self.data_ingestion_artifact)
             self.data_transformation_artifact:DataTransformationArtifact=self.start_data_transformation(data_validation_artifact=self.data_validation_artifact)
-
         except Exception as e:
 
             raise SensorException(e,sys)
