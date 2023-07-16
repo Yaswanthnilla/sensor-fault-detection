@@ -21,7 +21,6 @@ from sensor.ml.metric.classification_metric import get_classification_score,to_d
 
 
 
-
 app = FastAPI()
 origins = ["*"]
 
