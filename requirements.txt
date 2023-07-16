@@ -3,7 +3,7 @@ from_root
 dnspython
 numpy
 pandas
-sklearn
+scikit-learn
 scipy
 PyYAML
 dill
