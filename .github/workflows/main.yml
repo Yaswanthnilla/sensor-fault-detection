@@ -55,9 +55,6 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: latest
 
-      - name: Check out code
-        uses: actions/checkout@v2
-        
 
         run: |
           # Build a docker container and
