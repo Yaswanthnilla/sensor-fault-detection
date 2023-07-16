@@ -1,5 +1,6 @@
 import yaml
 from sensor.exception import SensorException
+from sensor.ml.metric.classification_metric import get_classification_score
 from sensor.logger import logging
 import os,sys
 import numpy as np
@@ -18,7 +19,8 @@ def write_yaml_file(file_path: str, content: object, replace: bool = False) -> N
         if replace:
             if os.path.exists(file_path):
                 os.remove(file_path)
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        dir_path=os.path.dirname(file_path)
+        os.makedirs(dir_path, exist_ok=True)
         with open(file_path, "w") as file:
             yaml.dump(content, file)
     except Exception as e:
@@ -63,3 +65,12 @@ def save_object(file_path: str, obj: object) -> None:
         logging.info("Exited the save_object method of MainUtils class")
     except Exception as e:
         raise SensorException(e, sys) from e
+    
+
+
+def load_object(file_path:str)->object:
+    try:
+        with open(file_path,"rb") as obj:
+            return dill.load(obj)
+    except Exception as e:
+        raise SensorException(e,sys)
