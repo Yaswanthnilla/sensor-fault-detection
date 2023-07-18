@@ -1,6 +1,6 @@
 from sensor.exception import SensorException
-from sensor.constant.training_pipeline import MODEL_FILE_NAME,SAVED_MODEL_DIR
-import os,sys
+from sensor.constant.training_pipeline import MODEL_FILE_NAME,SAVED_MODEL_DIR,TRAINING_BUCKET_NAME
+import os,sys,subprocess
 
 class TargetValueMapping:
     def __init__(self):
@@ -38,16 +38,22 @@ class ModelResolver:
 
     def __init__(self,model_dir=SAVED_MODEL_DIR):
         try:
-            self.model_dir = model_dir
+            # self.model_dir = model_dir
+            self.model_dir = f's3://{TRAINING_BUCKET_NAME}/{SAVED_MODEL_DIR}'
 
         except Exception as e:
             raise e
 
     def get_best_model_path(self)->str:
         try:
-            timestamps = list(map(int,os.listdir(self.model_dir)))
+            aws_command = f"aws s3 ls {self.model_dir}/"
+            output = subprocess.check_output(aws_command, shell=True, text=True)
+            print(output)
+            timestamps = [int(line.split()[1].rstrip('/')) for line in output.strip().split('\n') if line.startswith('PRE ')]
+            print(timestamps)
             latest_timestamp = max(timestamps)
-            latest_model_path= os.path.join(self.model_dir,f"{latest_timestamp}",MODEL_FILE_NAME)
+            latest_model_path= f'{self.model_dir}/{latest_timestamp}/{MODEL_FILE_NAME}'
+            print(latest_model_path)
             return latest_model_path
         except Exception as e:
             raise e

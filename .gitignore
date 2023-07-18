@@ -28,6 +28,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 saved_models/*
+deployment-steps.txt
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

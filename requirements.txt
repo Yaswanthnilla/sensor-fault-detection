@@ -11,4 +11,7 @@ imblearn
 xgboost==1.6.2
 fastapi
 uvicorn
+fsspec
+s3fs
+smart_open[s3]
 -e .
