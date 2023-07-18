@@ -105,9 +105,9 @@ async def predict_route():
             os.system(command)
             return Response(f"Prediction successful and the predictions are {y_pred}")
     except Exception as e:
-        # command = f"aws s3 rm s3://{PREDICTION_BUCKET_NAME}/{prediction_pipeline.TEST_FILES_DIR} --recursive"
-        # os.system(command)
-        # shutil.rmtree(prediction_pipeline.TEST_FILES_DIR)
+        command = f"aws s3 rm s3://{PREDICTION_BUCKET_NAME}/{prediction_pipeline.TEST_FILES_DIR} --recursive"
+        os.system(command)
+        shutil.rmtree(prediction_pipeline.TEST_FILES_DIR)
         return Response(f"Error Occurred! {e}")
 
         
