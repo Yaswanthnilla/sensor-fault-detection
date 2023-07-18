@@ -35,7 +35,6 @@ app.add_middleware(
 )
 
 
-
 @app.get("/", tags=["authentication"])
 async def index():
     return RedirectResponse(url="/docs")
