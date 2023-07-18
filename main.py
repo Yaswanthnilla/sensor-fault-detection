@@ -44,14 +44,17 @@ df=None
 @app.post("/uploadcsv")
 def upload_csv_file_for_prediction(csv_file: UploadFile = File(...)):
     # timestamp = round(datetime.now().timestamp())
-    testing_file_path=os.path.join(prediction_pipeline.TEST_FILES_DIR,f"{prediction_pipeline.PREDICTION_FILE_NAME}")
+    # testing_file_path=os.path.join(prediction_pipeline.TEST_FILES_DIR,f"{prediction_pipeline.PREDICTION_FILE_NAME}")
     # print(testing_file_path)
-    os.makedirs(os.path.dirname(testing_file_path),exist_ok=True)
+    # os.makedirs(os.path.dirname(testing_file_path),exist_ok=True)
     df = pd.read_csv(csv_file.file)
-    df.to_csv(testing_file_path,index=False)
-    s3_sync=S3Sync()
-    aws_bucket_url=f"s3://{TRAINING_BUCKET_NAME}/{prediction_pipeline.TEST_FILES_DIR}"
-    s3_sync.sync_folder_to_s3(folder=prediction_pipeline.TEST_FILES_DIR,aws_bucket_url=aws_bucket_url)
+    # df.to_csv(testing_file_path,index=False)
+    # s3_sync=S3Sync()
+    # aws_bucket_url=f"s3://{TRAINING_BUCKET_NAME}/{prediction_pipeline.TEST_FILES_DIR}"
+    # s3_sync.sync_folder_to_s3(folder=prediction_pipeline.TEST_FILES_DIR,aws_bucket_url=aws_bucket_url)
+    file_path=f"s3://{TRAINING_BUCKET_NAME}/{prediction_pipeline.TEST_FILES_DIR}/{prediction_pipeline.PREDICTION_FILE_NAME}"
+    print(file_path)
+    df.to_csv(file_path,index=False)
     return Response(f"{csv_file.filename} uploaded succesfully. Go for Prediction")
 
 @app.get("/train")
@@ -100,14 +103,14 @@ async def predict_route():
             pred_metric=get_classification_score(y_true=target_col,y_pred=y_pred)
             y_pred=y_pred.replace(target_val_mapping.reverse_mapping())
             print(to_dict(pred_metric))
-            shutil.rmtree(prediction_pipeline.TEST_FILES_DIR)
+            # shutil.rmtree(prediction_pipeline.TEST_FILES_DIR)
             command = f"aws s3 rm s3://{TRAINING_BUCKET_NAME}/{prediction_pipeline.TEST_FILES_DIR} --recursive"
             os.system(command)
             return Response(f"Prediction successful and the predictions are {y_pred}")
     except Exception as e:
         command = f"aws s3 rm s3://{PREDICTION_BUCKET_NAME}/{prediction_pipeline.TEST_FILES_DIR} --recursive"
         os.system(command)
-        shutil.rmtree(prediction_pipeline.TEST_FILES_DIR)
+        # shutil.rmtree(prediction_pipeline.TEST_FILES_DIR)
         return Response(f"Error Occurred! {e}")
 
         
