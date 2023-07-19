@@ -19,7 +19,11 @@ class MongoDBClient:
                     mongo_db_url = mongo_db_url.replace('"', '')
                 print(mongo_db_url)
 
-                MongoDBClient.client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
+                # MongoDBClient.client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
+                if "localhost" in mongo_db_url:
+                    MongoDBClient.client = pymongo.MongoClient(mongo_db_url) 
+                else:
+                    MongoDBClient.client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
             self.client = MongoDBClient.client
             self.database = self.client[database_name]
             self.database_name = database_name

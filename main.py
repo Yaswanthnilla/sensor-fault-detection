@@ -23,6 +23,16 @@ from sensor.constant.s3_bucket import PREDICTION_BUCKET_NAME
 
 
 
+env_file_path=os.path.join(os.getcwd(),"env.yaml")
+
+def set_env_variable(env_file_path):
+
+    if os.getenv('MONGO_DB_URL',None) is None:
+        env_config = read_yaml_file(env_file_path)
+        os.environ['MONGO_DB_URL']=env_config['MONGO_DB_URL']
+
+
+
 app = FastAPI()
 origins = ["*"]
 
@@ -118,6 +128,7 @@ async def predict_route():
 
 
 if __name__=="__main__":
+    set_env_variable(env_file_path=env_file_path)
     app_run(app, host=APP_HOST, port=APP_PORT)
 
 
