@@ -1,1 +1,9 @@
 # sensor-fault-detection
+## Tech stack used
+- PYTHON
+- FAST API
+- MACHINE LEARNING ALGORITHMS
+- KAFKA
+- MONGO DB
+- AWS SERVICES USED : AWS S3, AWS ECR, AWS EC2
+- IOT
